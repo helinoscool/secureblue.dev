@@ -42,7 +42,6 @@ permalink: /faq
   - [How is gaming on secureblue?](#gaming)
   - [How do I install Steam?](#steam)
   - [How do I enable anti-cheat support?](#anticheat)
-  - [How do I install Docker?](#docker)
   - [How do I run virtual machines?](#libvirt)
   - [How do I install additional fonts?](#fonts)
   - [How do I enable printing?](#printing)
@@ -61,7 +60,7 @@ permalink: /faq
   - [How do I enable kernel modules?](#enable-kernel-modules)
   - [How do I install an app as a PWA?](#pwa)
   - [How do I configure GRUB?](#configure-grub)
-  - [How do I disable thumbnailing?](#thumbnailing)
+  - [How do I enable thumbnailing?](#thumbnailing)
 
 - [Troubleshooting](#troubleshooting)
   - [Something broke! How do I rollback?](#rollback)
@@ -108,7 +107,7 @@ secureblue uses several complementary mechanisms to protect against a variety of
 ### [What are the official secureblue communication channels?](#comms)
 {: #comms}
 
-The secureblue [Bluesky account](https://bsky.app/profile/secureblue.dev), GitHub [release notes](https://github.com/secureblue/secureblue/releases), and [official email account](mailto:secureblueadmin@proton.me) are the only official secureblue communication channels. All other accounts and communications are not official secureblue communications.
+The secureblue [Bluesky account](https://bsky.app/profile/secureblue.dev), GitHub [release notes](https://github.com/secureblue/secureblue/releases), and [official email account](mailto:secureblueadmin@proton.me) are the only official secureblue communication channels. Do not send support or information requests to this email. All other accounts and communications are not official secureblue communications.
 
 ### [What is the difference between Qubes OS and secureblue?](#qubes)
 {: #qubes}
@@ -229,6 +228,7 @@ If you need to update your system manually, for example after a severe CVE is pa
 {% include alert.html type='caution' content='Disabling automatic updates is a security degradation. You will no longer automatically receive security updates.' %}
 
 - `systemctl disable rpm-ostreed-automatic.timer` disables automatic system updates. To update manually, run `ujust update-system`.
+- If you are on a UKI image ([experimental](https://github.com/secureblue/secureblue/blob/live/uki/README.md)) `systemctl disable bootc-upgrade.timer`, To update manually, run `ujust update-system`.
 - `systemctl disable flatpak-system-update.timer` and `systemctl disable --global flatpak-user-update.timer` disable automatic updates for system Flatpaks and user Flatpaks, respectively. To update manually, run `flatpak update`.
 - `systemctl disable --global brew-upgrade.timer brew-update.timer` disables automatic Homebrew updates. To update manually, run `brew update && brew upgrade`.
 - `systemctl disable podman-auto-update.timer` and `systemctl disable --global podman-auto-update.timer` disable automatic Podman container updates for system and user containers, respectively. To update manually, use `podman update` on your containers.
@@ -299,21 +299,6 @@ The command `ujust set-ptrace` (alias `ujust set-anticheat-support`) allows swit
 - Disabled: The default. No processes can use ptrace; this breaks anti-cheat software.
 - Enabled: This enables "restricted" ptrace, which allows parent processes to ptrace-attach to child processes, enabling some anti-cheat solutions to work.
 - Container-only: This enables restricted ptrace, but only inside [container images](#container-userns). You can use this mode, for example, if you're using a [Distrobox](#distrobox-assemble) to run a game that needs anti-cheat support.
-
-### [How do I install Docker?](#docker)
-{: #docker}
-
-```
-ujust install-docker
-```
-
-Similarly, you can uninstall Docker with:
-
-```
-ujust uninstall-docker
-```
-
-Consider using Podman over Docker as it is already installed on secureblue images.
 
 ### [How do I run virtual machines?](#libvirt)
 {: #libvirt}
@@ -411,10 +396,10 @@ Attempting to bubblewrap a program without first enabling the ability toggled by
 ### [How do I manage potentially dangerous files or attachments?](#safe-pdfs)
 {: #safe-pdfs}
 
-The program [Dangerzone](https://dangerzone.rocks/) is designed to sanitize potentially dangerous PDFs, office documents, or images in a sandboxed environment. To install Dangerzone, run:
+The program [Dangerzone](https://dangerzone.rocks/) is designed to sanitize potentially dangerous PDFs, office documents, or images in a sandboxed environment. To enable Dangerzone, run:
 
 ```
-ujust install-dangerzone
+ujust enable-dangerzone
 ```
 
 Note that this comes with a security trade-off: it requires enabling [container-domain user namespaces](#container-userns) and [container-only restricted ptrace](#anticheat), allowing container processes to ptrace-attach to child processes. Dangerzone runs Podman under the hood, and requires [gVisor](https://gvisor.dev/) to run document processing workloads in an isolated sandbox, [which needs Linux's ptrace subsystem to intercept system calls](https://gvisor.dev/blog/2024/09/23/safe-ride-into-the-dangerzone/).
@@ -490,29 +475,32 @@ As of Fedora 41, GRUB configuration is now [static](https://discussion.fedorapro
 
 Please note, the instructions provided by the Arch Wiki article for manually adding a menu entry for Windows are incorrect. The Wiki states you need to provide a `hints_string` as a parameter for the `search` function, however this is not required and will cause GRUB to error. You only need to provide the UUID for the partition that holds the Windows boot EFI file.
 
-### [How do I disable thumbnailing?](#thumbnailing)
+### [How do I enable thumbnailing?](#thumbnailing)
 {: #thumbnailing}
 
-Given that the sandboxing provided for thumbnailing by desktop environments is at best <a href="/images#security-recommendation">weak</a>, it's recommended that users disable thumbnailing altogether to protect against <a href="https://scarybeastsecurity.blogspot.com/2016/11/0day-exploit-compromising-linux-desktop.html">attacks via thumbnailers</a>. Disabling thumbnailing is currently not supported by COSMIC Files but it has been [proposed](https://github.com/pop-os/cosmic-files/issues/1216). For other systems, follow the instructions below.
+{% include alert.html type='caution' content='Enabling thumbnailing is a <a href="https://scarybeastsecurity.blogspot.com/2016/11/0day-exploit-compromising-linux-desktop.html">security degradation</a>. Thumbnailers currently have <a href="/images#security-recommendation">no sandboxing</a> on secureblue.' %}
+
+Disabling thumbnailing is currently not supported by COSMIC Files but it has been [proposed](https://github.com/pop-os/cosmic-files/issues/1216). To enable thumbnailing on other systems, follow the instructions below.
 
 #### GNOME
 
-Within GNOME Files preferences, set "Show Thumbnails" to "Never":
+Within GNOME Files preferences, set "Show Thumbnails" to "On This Device Only" or "All Folders":
 
 <img alt="GNOME thumbnailing configuration" src="/assets/gnome_thumbnail.png" />
 
 #### KDE
 
-Within Dolphin settings, uncheck all items under the Previews tab in the Interface section:
+Within Dolphin settings, check items under the Previews tab in the Interface section according to your preferences:
 
 <img alt="KDE thumbnailing configuration" src="/assets/kde_thumbnail.png" />
 
 #### Sway
 
-Disable tumblerd using the following command:
+Enable tumblerd using the following command:
 
 ```
-systemctl mask --user --now tumblerd.service
+mkdir -p ~/.config/systemd/user
+cp /usr/lib/systemd/user/tumblerd.service ~/.config/systemd/user
 ```
 
 <hr>

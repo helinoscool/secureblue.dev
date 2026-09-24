@@ -11,7 +11,7 @@ permalink: /features
 
 - Install and enable [hardened_malloc](https://github.com/GrapheneOS/hardened_malloc) globally, including for Flatpaks.
 - Install [Trivalent](https://github.com/secureblue/Trivalent), our security-focused, Chromium-based browser inspired by [Vanadium](https://github.com/GrapheneOS/Vanadium). <sup>[Why Chromium-based?](https://grapheneos.org/usage#web-browsing)</sup> <sup>[Why not a Flatpak?](https://forum.vivaldi.net/post/669805)</sup>
-- SELinux [confinement](https://github.com/secureblue/Trivalent/blob/live/build/selinux/trivalent.te) for Trivalent.
+- SELinux [confinement](https://github.com/secureblue/Trivalent/blob/live/selinux/trivalent.te) for Trivalent.
 - Kernel hardening via sysctl. <sup>[details](https://github.com/secureblue/secureblue/blob/live/files/system/usr/lib/sysctl.d/55-hardening.conf)</sup>
 - Kernel hardening via kernel arguments. <sup>[details](/articles/kargs)</sup>
 - Configure chronyd to use Network Time Security (NTS).
@@ -23,6 +23,7 @@ permalink: /features
 
 - Remove [suid-root](https://en.wikipedia.org/wiki/Setuid) from [numerous binaries](https://github.com/secureblue/secureblue/blob/live/files/scripts/removesuid.sh), replacing functionality [using capabilities](https://github.com/secureblue/secureblue/blob/live/files/scripts/removesuid.sh#L89), and remove `sudo`, `su`, and `pkexec` entirely in favor of `run0`. <sup>[why?](https://mastodon.social/@pid_eins/112353324518585654)</sup>
 - Disable Xwayland by default (for GNOME, Plasma, and Sway images).
+- Disable thumbnailing by default (for GNOME, Plasma, and Sway images).
 - Disable install & usage of GNOME user extensions by default.
 - Disable KDE GHNS by default. <sup>[why?](https://blog.davidedmundson.co.uk/blog/kde-store-content/)</sup>
 - Remove the unmaintained and suid-root fuse2 by default.
