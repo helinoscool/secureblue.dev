@@ -107,7 +107,7 @@ secureblue uses several complementary mechanisms to protect against a variety of
 ### [What are the official secureblue communication channels?](#comms)
 {: #comms}
 
-The secureblue [Bluesky account](https://bsky.app/profile/secureblue.dev), GitHub [release notes](https://github.com/secureblue/secureblue/releases), and [official email account](mailto:secureblueadmin@proton.me) are the only official secureblue communication channels. All other accounts and communications are not official secureblue communications.
+The secureblue [Bluesky account](https://bsky.app/profile/secureblue.dev), GitHub [release notes](https://github.com/secureblue/secureblue/releases), and [official email account](mailto:secureblueadmin@proton.me) are the only official secureblue communication channels. Do not send support or information requests to this email. All other accounts and communications are not official secureblue communications.
 
 ### [What is the difference between Qubes OS and secureblue?](#qubes)
 {: #qubes}
